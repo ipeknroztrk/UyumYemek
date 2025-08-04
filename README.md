@@ -340,7 +340,6 @@ FROM DISK = 'C:\Backup\UyumYemekDB.bak'
 - Connection pooling optimize edin
 
   ###GÖRSELLER
-  <img width="1920" height="1200" alt="Image" src="https://github.com/user-attachments/assets/4c1c4789-7dae-4f01-bcf5-f19a467048af" />
 <img width="1918" height="984" alt="Image" src="https://github.com/user-attachments/assets/04b91247-48bc-4b63-98dc-744fd6e9338f" />
 <img width="1897" height="981" alt="Image" src="https://github.com/user-attachments/assets/b9dfeb45-9add-459a-a193-4faa7c5c84e5" />
 <img width="1897" height="979" alt="Image" src="https://github.com/user-attachments/assets/b282a7e6-dda7-4a3b-b4db-49cef2959b26" />
