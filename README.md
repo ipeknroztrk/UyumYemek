@@ -339,6 +339,27 @@ FROM DISK = 'C:\Backup\UyumYemekDB.bak'
 - Büyük tablolar için partitioning düşünün
 - Connection pooling optimize edin
 
+  ###GÖRSELLER
+  <img width="1920" height="1200" alt="Image" src="https://github.com/user-attachments/assets/4c1c4789-7dae-4f01-bcf5-f19a467048af" />
+<img width="1918" height="984" alt="Image" src="https://github.com/user-attachments/assets/04b91247-48bc-4b63-98dc-744fd6e9338f" />
+<img width="1897" height="981" alt="Image" src="https://github.com/user-attachments/assets/b9dfeb45-9add-459a-a193-4faa7c5c84e5" />
+<img width="1897" height="979" alt="Image" src="https://github.com/user-attachments/assets/b282a7e6-dda7-4a3b-b4db-49cef2959b26" />
+<img width="1896" height="793" alt="Image" src="https://github.com/user-attachments/assets/4893faaa-9d18-48a3-a7e7-9ebbd03c408a" />
+
+<img width="1893" height="983" alt="Image" src="https://github.com/user-attachments/assets/529dcf66-8707-4d8e-9c42-36766dbae20f" />
+<img width="1909" height="988" alt="Image" src="https://github.com/user-attachments/assets/0de6c46d-a83f-4bfb-b48a-eb7b7f581855" />
+<img width="1918" height="989" alt="Image" src="https://github.com/user-attachments/assets/5fc6e1d4-7b52-41d0-b038-00d11cf823c7" />
+<img width="1897" height="984" alt="Image" src="https://github.com/user-attachments/assets/27102583-7b67-4a33-aac3-cee83dedd910" />
+<img width="1893" height="982" alt="Image" src="https://github.com/user-attachments/assets/6bf9791c-c3aa-4c26-bd51-d69d4ee0456f" />
+<img width="1899" height="983" alt="Image" src="https://github.com/user-attachments/assets/d37117a3-6939-4842-ada9-ae654facc624" />
+<img width="1909" height="990" alt="Image" src="https://github.com/user-attachments/assets/df18ebe9-55a5-4724-82a4-b30d7bdaffdd" />
+<img width="1893" height="992" alt="Image" src="https://github.com/user-attachments/assets/8d00fc3c-fc01-41e0-b757-31b6aadd294a" />
+<img width="1908" height="972" alt="Image" src="https://github.com/user-attachments/assets/e223fffb-91db-4482-aee2-c038d002cd8a" />
+<img width="1901" height="998" alt="Image" src="https://github.com/user-attachments/assets/604b0942-a423-4dea-92ab-7911d47d4432" />
+<img width="1913" height="972" alt="Image" src="https://github.com/user-attachments/assets/55984a21-9653-4eed-8e4e-667b8adab678" />
+<img width="1917" height="977" alt="Image" src="https://github.com/user-attachments/assets/e59fa1e0-4b76-4787-b5eb-665b05866094" />
+<img width="1890" height="979" alt="Image" src="https://github.com/user-attachments/assets/55d0ea18-f860-4de1-93e3-d162dabf2afb" />
+
 ## 📚 Ek Kaynaklar
 
 - [ASP.NET Core Dokümantasyonu](https://docs.microsoft.com/aspnet/core)
