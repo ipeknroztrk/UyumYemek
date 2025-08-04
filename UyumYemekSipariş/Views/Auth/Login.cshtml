@@ -1,0 +1,93 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Stellar Admin</title>
+    <!-- plugins:css -->
+    <link rel="stylesheet" href="~/wwwroot/Stellar-1.0.0/assets/vendors/simple-line-icons/css/simple-line-icons.css">
+    <link rel="stylesheet" href="~/wwwroot/Stellar-1.0.0/assets/vendors/flag-icon-css/css/flag-icons.min.css">
+    <link rel="stylesheet" href="~/wwwroot/Stellar-1.0.0/assets/vendors/css/vendor.bundle.base.css">
+    <!-- endinject -->
+    <!-- Plugin css for this page -->
+    <!-- End plugin css for this page -->
+    <!-- inject:css -->
+    <!-- endinject -->
+    <!-- Layout styles -->
+    <link rel="stylesheet" href="~/wwwroot/Stellar-1.0.0/assets/css/vertical-light-layout/style.css">
+    <!-- End layout styles -->
+    <link rel="shortcut icon" href="~/wwwroot/Stellar-1.0.0/assets/images/favicon.png" />
+    
+    <style>
+        .btn-bright-yellow {
+            background-color: #FFD700 !important;
+            border-color: #FFD700 !important;
+            color: #000 !important;
+            font-weight: bold;
+        }
+        
+        .btn-bright-yellow:hover {
+            background-color: #FFA500 !important;
+            border-color: #FFA500 !important;
+            color: #000 !important;
+            transform: translateY(-2px);
+            transition: all 0.3s ease;
+        }
+        
+        .text-bright-yellow {
+            color: #FFD700 !important;
+            text-decoration: none;
+        }
+        
+        .text-bright-yellow:hover {
+            color: #FFA500 !important;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-scroller">
+        <div class="container-fluid page-body-wrapper full-page-wrapper">
+            <div class="content-wrapper d-flex align-items-center auth">
+                <div class="row flex-grow">
+                    <div class="col-lg-4 mx-auto">
+                        <div class="auth-form-light text-left p-5">
+                            <div class="brand-logo">
+                                <img src="https://i.hizliresim.com/cyzy057.jpg">
+                            </div>
+                           
+                            <form class="pt-3" method="post" action="/Auth/Login">
+                                <div class="form-group mb-4">
+                                    <label for="exampleInputEmail1" class="form-label">Email</label>
+                                    <input type="email" name="email" class="form-control form-control-lg rounded-3 shadow-sm" id="exampleInputEmail1" placeholder="Emailinizi giriniz..." required>
+                                </div>
+                                <div class="form-group mb-4">
+                                    <label for="exampleInputPassword1" class="form-label">Şifre</label>
+                                    <input type="password" name="password" class="form-control form-control-lg rounded-3 shadow-sm" id="exampleInputPassword1" placeholder="Şifrenizi giriniz..." required>
+                                </div>
+                                <div class="mt-4 d-grid">
+                                    <button type="submit" class="btn btn-bright-yellow btn-lg font-weight-medium w-100 rounded-3">Giriş Yap</button>
+                                </div>
+                                <div class="text-center mt-4 font-weight-light">
+                                    Hesabın Yok Mu? <a href="register.html" class="text-bright-yellow fw-bold">Kayıt Ol</a>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="~/wwwroot/Stellar-1.0.0/assets/vendors/js/vendor.bundle.base.js"></script>
+    <script src="~/wwwroot/Stellar-1.0.0/assets/js/off-canvas.js"></script>
+    <script src="~/wwwroot/Stellar-1.0.0/assets/js/hoverable-collapse.js"></script>
+    <script src="~/wwwroot/Stellar-1.0.0/assets/js/misc.js"></script>
+    <script src="~/wwwroot/Stellar-1.0.0/assets/js/settings.js"></script>
+    <script src="~/wwwroot/Stellar-1.0.0/js/todolist.js"></script>
+</body>
+</html>

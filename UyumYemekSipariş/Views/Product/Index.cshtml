@@ -1,0 +1,190 @@
+﻿
+@model List<UyumYemekSipariş.Models.Product>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/_UserLayout.cshtml";
+    var kategoriler = ViewBag.Kategoriler as List<UyumYemekSipariş.Models.Category>;
+}
+
+<section class="py-5">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="bootstrap-tabs product-tabs">
+                    <div class="tabs-header d-flex justify-content-between border-bottom my-5">
+                        <h3>Ürünlerimiz</h3>
+                        <nav>
+                            <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                                <a href="#" class="nav-link text-uppercase fs-6 active" id="nav-all-tab" data-bs-toggle="tab" data-bs-target="#nav-all">Tüm Kategoriler</a>
+                                @if (kategoriler != null)
+                                {
+                                    foreach (var kategori in kategoriler)
+                                    {
+                                        <a href="#" class="nav-link text-uppercase fs-6" id="nav-@kategori.CategoryID-tab" data-bs-toggle="tab" data-bs-target="#nav-@kategori.CategoryID">@kategori.Name</a>
+                                    }
+                                }
+                            </div>
+                        </nav>
+                    </div>
+
+                    <div class="tab-content" id="nav-tabContent">
+
+                        <div class="tab-pane fade show active" id="nav-all" role="tabpanel" aria-labelledby="nav-all-tab">
+                            <div class="row">
+                                @foreach (var item in Model)
+                                {
+                                    <div class="col-lg-3 col-md-4 col-sm-6 col-12 mb-4">
+                                      
+                                        <div class="product-item card h-100 shadow-sm border-0"
+                                             data-product-id="@item.ProductID"
+                                             data-restaurant-id="@(item.RestaurantID ?? 1)"
+                                             data-restaurant-name="@(item.Restaurant?.Name ?? "Varsayılan Restoran")">
+
+                                            <div class="position-relative">
+                                                <a href="#" class="btn-wishlist position-absolute top-0 end-0 m-2">
+                                                    <svg width="24" height="24"><use xlink:href="#heart"></use></svg>
+                                                </a>
+                                                <figure class="mb-0">
+                                                    <a href="#" title="@item.Name">
+                                                        <img src="@item.ImagePath" class="card-img-top" style="height: 200px; object-fit: cover;" alt="@item.Name">
+                                                    </a>
+                                                </figure>
+
+                                                @if (item.Restaurant != null)
+                                                {
+                                                    <div class="position-absolute bottom-0 start-0 m-2">
+                                                        <span class="badge bg-dark bg-opacity-75 restaurant-name" data-restaurant-id="@item.RestaurantID">
+                                                            📍 @item.Restaurant.Name
+                                                        </span>
+                                                    </div>
+                                                }
+                                            </div>
+
+                                            <div class="card-body">
+                                                <h5 class="card-title product-name">@item.Name</h5>
+                                                <p class="card-text text-muted small">@item.Description</p>
+
+                                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                                    <span class="badge bg-secondary category">@item.Category.Name</span>
+                                                    <span class="rating">
+                                                        <svg width="16" height="16" class="text-primary"><use xlink:href="#star-solid"></use></svg> 4.5
+                                                    </span>
+                                                </div>
+
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <span class="price h5 mb-0 text-primary">@item.Price TL</span>
+                                                 
+                                                    <div class="input-group product-qty" style="width: 100px;">
+                                                        <button class="btn btn-outline-secondary btn-sm quantity-left-minus" type="button">-</button>
+                                                        <input type="number" class="form-control form-control-sm text-center quantity-input" value="1" min="1">
+                                                        <button class="btn btn-outline-secondary btn-sm quantity-right-plus" type="button">+</button>
+                                                    </div>
+                                                </div>
+
+                                              
+                                                <button class="btn btn-primary w-100 mt-3 add-to-cart-btn">
+                                                    <i class="fas fa-shopping-cart me-2"></i>Sepete Ekle
+                                                </button>
+
+                                              
+                                                <input type="hidden" name="ProductID" value="@item.ProductID">
+                                                <input type="hidden" name="restaurantId" value="@(item.RestaurantID ?? 1)">
+                                                <input type="hidden" name="restaurantName" value="@(item.Restaurant?.Name ?? "Varsayılan Restoran")">
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+
+                      
+                        @if (kategoriler != null)
+                        {
+                            foreach (var kategori in kategoriler)
+                            {
+                                <div class="tab-pane fade" id="nav-@kategori.CategoryID" role="tabpanel" aria-labelledby="nav-@kategori.CategoryID-tab">
+                                    <div class="row">
+                                        @foreach (var item in Model.Where(p => p.CategoryID == kategori.CategoryID))
+                                        {
+                                            <div class="col-lg-3 col-md-4 col-sm-6 col-12 mb-4">
+                                              
+                                                <div class="product-item card h-100 shadow-sm border-0"
+                                                     data-product-id="@item.ProductID"
+                                                     data-restaurant-id="@(item.RestaurantID ?? 1)"
+                                                     data-restaurant-name="@(item.Restaurant?.Name ?? "Varsayılan Restoran")">
+
+                                                    <div class="position-relative">
+                                                        <a href="#" class="btn-wishlist position-absolute top-0 end-0 m-2">
+                                                            <svg width="24" height="24"><use xlink:href="#heart"></use></svg>
+                                                        </a>
+                                                        <figure class="mb-0">
+                                                            <a href="#" title="@item.Name">
+                                                                <img src="@item.ImagePath" class="card-img-top" style="height: 200px; object-fit: cover;" alt="@item.Name">
+                                                            </a>
+                                                        </figure>
+
+                                                        @if (item.Restaurant != null)
+                                                        {
+                                                            <div class="position-absolute bottom-0 start-0 m-2">
+                                                                <span class="badge bg-dark bg-opacity-75 restaurant-name" data-restaurant-id="@item.RestaurantID">
+                                                                    📍 @item.Restaurant.Name
+                                                                </span>
+                                                            </div>
+                                                        }
+                                                    </div>
+
+                                                    <div class="card-body">
+                                                        <h5 class="card-title product-name">@item.Name</h5>
+                                                        <p class="card-text text-muted small">@item.Description</p>
+
+                                                        <div class="d-flex justify-content-between align-items-center mb-3">
+                                                            <span class="badge bg-secondary category">@item.Category.Name</span>
+                                                            <span class="rating">
+                                                                <svg width="16" height="16" class="text-primary"><use xlink:href="#star-solid"></use></svg> 4.5
+                                                            </span>
+                                                        </div>
+
+                                                        <div class="d-flex justify-content-between align-items-center">
+                                                            <span class="price h5 mb-0 text-primary">@item.Price TL</span>
+                                                         
+                                                            <div class="input-group product-qty" style="width: 100px;">
+                                                                <button class="btn btn-outline-secondary btn-sm quantity-left-minus" type="button">-</button>
+                                                                <input type="number" class="form-control form-control-sm text-center quantity-input" value="1" min="1">
+                                                                <button class="btn btn-outline-secondary btn-sm quantity-right-plus" type="button">+</button>
+                                                            </div>
+                                                        </div>
+
+                                                    
+                                                        <button class="btn btn-primary w-100 mt-3 add-to-cart-btn">
+                                                            <i class="fas fa-shopping-cart me-2"></i>Sepete Ekle
+                                                        </button>
+
+                                                       
+                                                        <input type="hidden" name="ProductID" value="@item.ProductID">
+                                                        <input type="hidden" name="restaurantId" value="@(item.RestaurantID ?? 1)">
+                                                        <input type="hidden" name="restaurantName" value="@(item.Restaurant?.Name ?? "Varsayılan Restoran")">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+   
+    document.addEventListener('DOMContentLoaded', function () {
+        // Layout'taki cart sistemini yeniden başlat
+        if (typeof reinitializeCart === 'function') {
+            reinitializeCart();
+        }
+
+    });
+</script>

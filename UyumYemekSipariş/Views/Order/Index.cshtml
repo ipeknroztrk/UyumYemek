@@ -1,0 +1,127 @@
+﻿@model List<UyumYemekSipariş.Models.Order>
+@{
+    ViewBag.Title = "Siparişlerim";
+    Layout = "~/Views/_UserLayout.cshtml";
+}
+<link href="~/wwwroot/css/Order.css" rel="stylesheet" />
+
+<div class="siparislerim-container">
+    <div class="sayfa-baslik">
+        <h1>🍕 <span class="vurgu">Sipariş</span>lerim</h1>
+    </div>
+
+    <div class="kullanici-hosgeldin">
+        <h3>Hoş geldin, <span class="isim">@ViewBag.KullaniciAdi</span>! 👋</h3>
+    </div>
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger">
+            @TempData["Error"]
+        </div>
+    }
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["Success"]
+        </div>
+    }
+
+    <div class="siparis-kartlari">
+        @if (Model != null && Model.Count > 0)
+        {
+            foreach (var siparis in Model)
+            {
+                <div class="siparis-kart">
+                    <div class="siparis-ust">
+                        <div class="siparis-numara">Sipariş #@siparis.OrderID</div>
+                     
+                    </div>
+
+                    <div class="siparis-detaylar">
+                        <div class="detay-kutu">
+                            <div class="detay-baslik">Sipariş Tarihi</div>
+                            <div class="detay-deger">@siparis.OrderDate.Value.ToString("dd.MM.yyyy HH:mm")</div>
+                        </div>
+                        <div class="detay-kutu">
+                            <div class="detay-baslik">Restoran</div>
+                            <div class="detay-deger">@(String.IsNullOrEmpty(siparis.Notes) ? "Restoran #" + siparis.RestaurantID : siparis.Notes)</div>
+                        </div>
+                        <div class="detay-kutu">
+                            <div class="detay-baslik">Ödeme Yöntemi</div>
+                            <div class="detay-deger">@siparis.PaymentMethod</div>
+                        </div>
+                    </div>
+
+                    <div class="toplam-fiyat">
+                        Toplam: @(siparis.TotalAmount.HasValue ? siparis.TotalAmount.Value.ToString("F2") : "0.00") TL
+                    </div>
+
+                    <div class="buton-alani">
+                        <a href="/Order/Details/@siparis.OrderID" class="detay-buton">
+                            📋 Detayları Görüntüle
+                        </a>
+
+                        @if (siparis.Status.ToLower() == "pending")
+                        {
+                            <button onclick="siparisIptal(@siparis.OrderID)" class="iptal-buton">
+                                ❌ İptal Et
+                            </button>
+                        }
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="bos-durum">
+                <div class="ikon">🛒</div>
+                <h3>Henüz hiç siparişiniz yok</h3>
+                <p>Lezzetli yemekleri keşfetmek için alışverişe başlayın!</p>
+                <a href="/Default/Index" class="kesfet-buton">🍴 Restoranları Keşfet</a>
+            </div>
+        }
+    </div>
+</div>
+
+<script>
+    function siparisIptal(siparisId) {
+        if (confirm('Bu siparişi iptal etmek istediğinizden emin misiniz?')) {
+            fetch('/Order/SiparisIptal', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: 'siparisId=' + siparisId
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('Sipariş başarıyla iptal edildi!');
+                        location.reload();
+                    } else {
+                        alert('Hata: ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    alert('Bir hata oluştu: ' + error);
+                });
+        }
+    }
+</script>
+
+@functions {
+    public string GetDurumText(string durum)
+    {
+        switch (durum?.ToLower())
+        {
+            case "pending": return "Beklemede";
+            case "confirmed": return "Onaylandı";
+            case "preparing": return "Hazırlanıyor";
+            case "delivered": return "Teslim Edildi";
+            case "cancelled": return "İptal Edildi";
+            default: return "Bilinmiyor";
+        }
+    }
+}

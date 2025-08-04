@@ -1,0 +1,83 @@
+﻿@model List<UyumYemekSipariş.Models.Product>
+
+@{
+    ViewBag.Title = "Ürünleri Yönet";
+    Layout = "~/Views/_AdminLayout.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-sm-flex align-items-center mb-4">
+                    <h4 class="card-title mb-sm-0">Tüm Ürünler</h4>
+                    <a href="/Admin/Index" class="text-dark ms-auto mb-3 mb-sm-0">Dashboard'a Dön</a>
+                </div>
+                <div class="table-responsive border rounded p-1">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th class="font-weight-bold">Ürün</th>
+                                <th class="font-weight-bold">Kategori</th>
+                                <th class="font-weight-bold">Restoran</th>
+                                <th class="font-weight-bold">Fiyat</th>
+                                <th class="font-weight-bold">Durum</th>
+                                <th class="font-weight-bold">Oluşturma Tarihi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        <div>
+                                            <strong>@item.Name</strong>
+                                            <br><small class="text-muted">@item.Description</small>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        @if (item.Category != null)
+                                        {
+                                            <span class="badge badge-info">@item.Category.Name</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">-</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (item.Restaurant != null)
+                                        {
+                                            <span>@item.Restaurant.Name</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">-</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        <strong>@item.Price ₺</strong>
+                                    </td>
+                                    <td>
+                                        @if (item.IsAvailable == true)
+                                        {
+                                            <div class="badge badge-success p-2">Aktif</div>
+                                        }
+                                        else
+                                        {
+                                            <div class="badge badge-danger p-2">Pasif</div>
+                                        }
+                                    </td>
+                                    <td>@item.CreatedDate?.ToString("dd.MM.yyyy")</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <div class="d-flex mt-4 flex-wrap align-items-center">
+                    <p class="text-muted mb-sm-0">Toplam @Model.Count ürün gösteriliyor</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

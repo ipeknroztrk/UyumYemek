@@ -1,0 +1,163 @@
+﻿
+@model List<UyumYemekSipariş.Models.Restaurant>
+
+@{
+    ViewBag.Title = "Restoranları Yönet";
+    Layout = "~/Views/_AdminLayout.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-sm-flex align-items-center mb-4">
+                    <h4 class="card-title mb-sm-0">Tüm Restoranlar</h4>
+                    <a href="/Admin/Index" class="text-dark ms-auto mb-3 mb-sm-0">Dashboard'a Dön</a>
+                </div>
+                <div class="table-responsive border rounded p-1">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th class="font-weight-bold">Restoran</th>
+                                <th class="font-weight-bold">Sahibi</th>
+                                <th class="font-weight-bold">Telefon</th>
+                                <th class="font-weight-bold">Min. Sipariş</th>
+                                <th class="font-weight-bold">Teslimat Ücreti</th>
+                                <th class="font-weight-bold">Onay Durumu</th>
+                                <th class="font-weight-bold">Aktiflik</th>
+                                <th class="font-weight-bold">İşlemler</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        <div>
+                                            <strong>@item.Name</strong>
+                                            <br><small class="text-muted">@item.Description</small>
+                                            <br><small class="text-muted">📍 @item.Address</small>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        @if (item.User != null)
+                                        {
+                                            <span>@item.User.FirstName @item.User.LastName</span>
+                                            <br><small class="text-muted">@item.User.Email</small>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">Kullanıcı bulunamadı</span>
+                                        }
+                                    </td>
+                                    <td>@item.PhoneNumber</td>
+                                    <td>@item.MinOrderAmount ₺</td>
+                                    <td>@item.DeliveryFee ₺</td>
+                                    <td>
+                                        @if (item.IsApproved == true)
+                                        {
+                                            <div class="badge badge-success p-2">Onaylı</div>
+                                        }
+                                        else
+                                        {
+                                            <div class="badge badge-warning p-2">Onay Bekliyor</div>
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (item.IsActive == true)
+                                        {
+                                            <div class="badge badge-info p-2">Aktif</div>
+                                        }
+                                        else
+                                        {
+                                            <div class="badge badge-danger p-2">Pasif</div>
+                                        }
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-sm btn-success me-1" onclick="approveRestaurant(@item.RestaurantID, @item.IsApproved.ToString().ToLower())" title="Onay Durumu">
+                                            @if (item.IsApproved == true)
+                                            {
+                                                <span>Onayı Kaldır</span>
+                                            }
+                                            else
+                                            {
+                                                <span>Onayla</span>
+                                            }
+                                        </button>
+                                        <button class="btn btn-sm btn-warning me-1" onclick="toggleStatus(@item.RestaurantID, @item.IsActive.ToString().ToLower())" title="Aktiflik Durumu">
+                                            @if (item.IsActive == true)
+                                            {
+                                                <span>Pasif Yap</span>
+                                            }
+                                            else
+                                            {
+                                                <span>Aktif Yap</span>
+                                            }
+                                        </button>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <div class="d-flex mt-4 flex-wrap align-items-center">
+                    <p class="text-muted mb-sm-0">Toplam @Model.Count restoran gösteriliyor</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).ready(function () {
+
+    window.approveRestaurant = function (restaurantId, currentStatus) {
+        var newStatus = !currentStatus;
+        var message = newStatus ? 'Restoranı onaylamak istediğinizden emin misiniz?' : 'Restoran onayını kaldırmak istediğinizden emin misiniz?';
+
+        if (confirm(message)) {
+            $.ajax({
+                url: '/Admin/ApproveRestaurant',
+                type: 'POST',
+                data: {
+                    restaurantId: restaurantId,
+                    isApproved: newStatus
+                },
+                success: function (result) {
+                    if (result.sonuc == 0) {
+                        location.reload();
+                    }
+                },
+                error: function () {
+                    alert('Bir hata oluştu!');
+                }
+            });
+        }
+    }
+
+    window.toggleStatus = function (restaurantId, currentStatus) {
+        var newStatus = !currentStatus;
+        var message = newStatus ? 'Restoranı aktif yapmak istediğinizden emin misiniz?' : 'Restoranı pasif yapmak istediğinizden emin misiniz?';
+
+        if (confirm(message)) {
+            $.ajax({
+                url: '/Admin/ToggleRestaurantStatus',
+                type: 'POST',
+                data: {
+                    restaurantId: restaurantId,
+                    isActive: newStatus
+                },
+                success: function (result) {
+                    if (result.sonuc == 0) {
+                        location.reload();
+                    }
+                },
+                error: function () {
+                    alert('Bir hata oluştu!');
+                }
+            });
+        }
+    }
+});
+</script>

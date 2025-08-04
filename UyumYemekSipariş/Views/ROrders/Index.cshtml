@@ -1,0 +1,207 @@
+﻿
+@model List<UyumYemekSipariş.Models.Order>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/_RestaurantOwnerLayout.cshtml";
+}
+<div class="row">
+    <div class="col-md-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-sm-flex align-items-center mb-4">
+                    <h4 class="card-title mb-sm-0">Siparişler</h4>
+                    <a href="#" class="text-dark ms-auto mb-3 mb-sm-0"> Tüm Siparişleri Görüntüle</a>
+                </div>
+                <div class="table-responsive border rounded p-1">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                               
+                                <th class="font-weight-bold">Sipariş No</th>
+                                <th class="font-weight-bold">Tutar</th>
+                                <th class="font-weight-bold">Sipariş Tarihi</th>
+                                <th class="font-weight-bold">Teslim Tarihi</th>
+                                <th class="font-weight-bold">Durum</th>
+                                <th class="font-weight-bold">İşlemler</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                     
+                                        @(item.User?.FirstName + " " + item.User?.LastName)
+                                    </td>
+                                    <td>#@item.OrderID</td>
+                                    <td>@item.TotalAmount ₺</td>
+                                    <td>
+                                        @if (item.OrderDate.HasValue)
+                                        {
+                                            @item.OrderDate.Value.ToString("dd.MM.yyyy HH:mm")
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">Tarih Yok</span>
+                                        }
+                                    </td>
+                                    <td>@item.AddressID</td>
+                                    <td>
+                                        @if (item.Status == "Pending")
+                                        {
+                                            <div class="badge badge-warning p-2">Bekliyor</div>
+                                        }
+                                        else if (item.Status == "Confirmed")
+                                        {
+                                            <div class="badge badge-info p-2">Onaylandı</div>
+                                        }
+                                        else if (item.Status == "Delivered")
+                                        {
+                                            <div class="badge badge-success p-2">Teslim Edildi</div>
+                                        }
+                                        else if (item.Status == "Cancelled")
+                                        {
+                                            <div class="badge badge-danger p-2">İptal</div>
+                                        }
+                                        else
+                                        {
+                                            <div class="badge badge-secondary p-2">@item.Status</div>
+                                        }
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-sm btn-info me-2" onclick="durumModal(@item.OrderID, '@item.Status')" title="Durum Güncelle">
+                                            Durum
+                                        </button>
+                                        <button class="btn btn-sm btn-danger" onclick="silSiparis(@item.OrderID)" title="Sil">
+                                            Sil
+                                        </button>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <div class="d-flex mt-4 flex-wrap align-items-center">
+                    <p class="text-muted mb-sm-0">Toplam @Model.Count sipariş gösteriliyor</p>
+                    <nav class="ms-auto">
+                        <ul class="pagination separated pagination-info mb-sm-0">
+                            <li class="page-item"><a href="#" class="page-link"><i class="icon-arrow-left"></i></a></li>
+                            <li class="page-item active"><a href="#" class="page-link">1</a></li>
+                            <li class="page-item"><a href="#" class="page-link">2</a></li>
+                            <li class="page-item"><a href="#" class="page-link">3</a></li>
+                            <li class="page-item"><a href="#" class="page-link">4</a></li>
+                            <li class="page-item"><a href="#" class="page-link"><i class="icon-arrow-right"></i></a></li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="durumModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Sipariş Durumu Güncelle</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="updateOrderId" />
+                <div class="form-group">
+                    <label>Durum Seçiniz</label>
+                    <select id="updateStatus" class="form-control">
+                        <option value="Pending">Bekliyor</option>
+                        <option value="Confirmed">Onaylandı</option>
+                        <option value="Delivered">Teslim Edildi</option>
+                        <option value="Cancelled">İptal</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">İptal</button>
+                <button type="button" class="btn btn-primary" onclick="durumGuncelle()">Güncelle</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="silModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Sipariş Sil</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Bu siparişi silmek istediğinizden emin misiniz?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">İptal</button>
+                <button type="button" class="btn btn-danger" id="confirmSil">Sil</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        let silId = 0;
+
+        window.durumModal = function (orderId, currentStatus) {
+            $('#updateOrderId').val(orderId);
+            $('#updateStatus').val(currentStatus);
+            $('#durumModal').modal('show');
+        }
+
+        window.durumGuncelle = function () {
+            $.ajax({
+                url: '/ROrders/DurumGuncelle',
+                type: 'POST',
+                data: {
+                    orderId: $('#updateOrderId').val(),
+                    status: $('#updateStatus').val()
+                },
+                success: function (result) {
+                    $('#durumModal').modal('hide');
+                    if (result.sonuc == 0) {
+                        location.reload();
+                    }
+                },
+                error: function () {
+                    $('#durumModal').modal('hide');
+                }
+            });
+        }
+
+        window.silSiparis = function (id) {
+            silId = id;
+            $('#silModal').modal('show');
+        }
+
+        $('#confirmSil').click(function () {
+            $.ajax({
+                url: '/ROrders/Sil',
+                type: 'POST',
+                data: { id: silId },
+                success: function (result) {
+                    $('#silModal').modal('hide');
+                    if (result.sonuc == 0) {
+                        location.reload();
+                    }
+                },
+                error: function () {
+                    $('#silModal').modal('hide');
+                }
+            });
+        });
+    });
+</script>

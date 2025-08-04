@@ -1,0 +1,85 @@
+﻿
+@model UyumYemekSipariş.Models.Restaurant
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/_RestaurantOwnerLayout.cshtml";
+}
+
+
+
+<div class="col-12 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">@(Model?.RestaurantID == 0 ? "Restoran Bilgileri Ekle" : "Restoran Bilgileri Güncelle")</h4>
+            <p class="card-description">Restoran bilgilerini giriniz</p>
+
+            @if (ViewBag.Message != null)
+            {
+                <div class="alert alert-success">@ViewBag.Message</div>
+            }
+
+            @if (ViewBag.Error != null)
+            {
+                <div class="alert alert-danger">@ViewBag.Error</div>
+            }
+
+            <form action="/RRestaurant/Edit" method="post" class="forms-sample">
+                <input type="hidden" name="RestaurantID" value="@(Model?.RestaurantID ?? 0)" />
+                <input type="hidden" name="OwnerID" value="@(Model?.OwnerID ?? 0)" />
+
+                <div class="form-group">
+                    <label for="Name">Restoran Adı</label>
+                    <input type="text" name="Name" value="@(Model?.Name ?? "")" class="form-control" placeholder="Restoran adını giriniz" required />
+                </div>
+
+                <div class="form-group">
+                    <label for="Description">Açıklama</label>
+                    <textarea name="Description" class="form-control" rows="4" placeholder="Restoran açıklamasını giriniz">@(Model?.Description ?? "")</textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="Address">Adres</label>
+                    <textarea name="Address" class="form-control" rows="3" placeholder="Restoran adresini giriniz">@(Model?.Address ?? "")</textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="PhoneNumber">Telefon</label>
+                    <input type="text" name="PhoneNumber" value="@(Model?.PhoneNumber ?? "")" class="form-control" placeholder="Telefon numarasını giriniz" />
+                </div>
+
+                <div class="form-group">
+                    <label for="MinOrderAmount">Minimum Sipariş Tutarı</label>
+                    <input type="number" name="MinOrderAmount" value="@(Model?.MinOrderAmount ?? 0)" class="form-control" placeholder="Minimum sipariş tutarını giriniz" step="0.01" />
+                </div>
+
+                <div class="form-group">
+                    <label for="DeliveryFee">Teslimat Ücreti</label>
+                    <input type="number" name="DeliveryFee" value="@(Model?.DeliveryFee ?? 0)" class="form-control" placeholder="Teslimat ücretini giriniz" step="0.01" />
+                </div>
+
+                <div class="form-group">
+                    <div class="form-check">
+                        <input type="checkbox" name="IsActive" value="true" @(Model?.IsActive == true ? "checked" : "") class="form-check-input" id="IsActive" />
+                        <input type="hidden" name="IsActive" value="false" />
+                        <label class="form-check-label" for="IsActive">
+                            Aktif
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="form-check">
+                        <input type="checkbox" name="IsApproved" value="true" @(Model?.IsApproved == true ? "checked" : "") class="form-check-input" id="IsApproved" />
+                        <input type="hidden" name="IsApproved" value="false" />
+                        <label class="form-check-label" for="IsApproved">
+                            Onaylı
+                        </label>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary me-2">Kaydet</button>
+                <a href="/RRestaurant/Index" class="btn btn-light">İptal</a>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,139 @@
+﻿@model List<UyumYemekSipariş.Models.Order>
+
+@{
+    ViewBag.Title = "Siparişleri Yönet";
+    Layout = "~/Views/_AdminLayout.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-sm-flex align-items-center mb-4">
+                    <h4 class="card-title mb-sm-0">Tüm Siparişler</h4>
+                    <a href="/Admin/Index" class="text-dark ms-auto mb-3 mb-sm-0">Dashboard'a Dön</a>
+                </div>
+                <div class="table-responsive border rounded p-1">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th class="font-weight-bold">Sipariş No</th>
+                                <th class="font-weight-bold">Müşteri</th>
+                                <th class="font-weight-bold">Restoran</th>
+                                <th class="font-weight-bold">Tutar</th>
+                                <th class="font-weight-bold">Durum</th>
+                                <th class="font-weight-bold">Sipariş Tarihi</th>
+                                <th class="font-weight-bold">Detaylar</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        <strong>#@item.OrderID</strong>
+                                    </td>
+                                    <td>
+                                        @if (item.User != null)
+                                        {
+                                            <div>
+                                                <strong>@item.User.FirstName @item.User.LastName</strong>
+                                                <br><small class="text-muted">@item.User.Email</small>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">-</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (item.Restaurant != null)
+                                        {
+                                            <span>@item.Restaurant.Name</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">-</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        <strong>@item.TotalAmount ₺</strong>
+                                    </td>
+                                    <td>
+                                        @{
+                                            string statusClass = "";
+                                            string statusText = item.Status;
+
+                                            switch (item.Status)
+                                            {
+                                                case "Pending":
+                                                    statusClass = "badge-warning";
+                                                    statusText = "Bekliyor";
+                                                    break;
+                                                case "Preparing":
+                                                    statusClass = "badge-info";
+                                                    statusText = "Hazırlanıyor";
+                                                    break;
+                                                case "OnWay":
+                                                    statusClass = "badge-primary";
+                                                    statusText = "Yolda";
+                                                    break;
+                                                case "Delivered":
+                                                    statusClass = "badge-success";
+                                                    statusText = "Teslim Edildi";
+                                                    break;
+                                                case "Cancelled":
+                                                    statusClass = "badge-danger";
+                                                    statusText = "İptal Edildi";
+                                                    break;
+                                                default:
+                                                    statusClass = "badge-secondary";
+                                                    break;
+                                            }
+                                        }
+                                        <span class="badge @statusClass p-2">@statusText</span>
+                                    </td>
+                                    <td>@(item.OrderDate?.ToString("dd.MM.yyyy HH:mm"))</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-info" onclick="viewOrderDetails(@item.OrderID)" title="Detayları Gör">
+                                            <i class="icon-eye"></i> Detay
+                                        </button>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <div class="d-flex mt-4 flex-wrap align-items-center">
+                    <p class="text-muted mb-sm-0">Toplam @Model.Count sipariş gösteriliyor</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="orderDetailModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Sipariş Detayları</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="orderDetailContent">
+              
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).ready(function () {
+
+    window.viewOrderDetails = function (orderId) {
+      
+        alert('Sipariş #' + orderId + ' detayları gösterilecek');
+    }
+});
+</script>

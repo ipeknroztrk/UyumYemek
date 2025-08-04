@@ -1,0 +1,145 @@
+﻿
+
+@{
+    ViewBag.Title = "Admin Dashboard";
+    Layout = "~/Views/_AdminLayout.cshtml";
+}
+
+<div class="content-wrapper">
+   
+    <div class="row quick-action-toolbar">
+        <div class="col-md-12 grid-margin">
+            <div class="card">
+                <div class="card-header d-block d-md-flex">
+                    <h5 class="mb-0">Admin Kontrol Paneli</h5>
+                    <p class="ms-auto mb-0">Tüm sistem verilerini yönetin <i class="icon-settings"></i></p>
+                </div>
+                <div class="d-md-flex row m-0 quick-action-btns" role="group">
+                    <div class="col-sm-6 col-md-3 p-3 text-center btn-wrapper">
+                        <a href="/Admin/Restaurants" class="btn px-0"> <i class="icon-home me-2"></i> Restoranları Yönet</a>
+                    </div>
+                    <div class="col-sm-6 col-md-3 p-3 text-center btn-wrapper">
+                        <a href="/Admin/Users" class="btn px-0"><i class="icon-people me-2"></i> Kullanıcıları Yönet</a>
+                    </div>
+                    <div class="col-sm-6 col-md-3 p-3 text-center btn-wrapper">
+                        <a href="/Admin/Orders" class="btn px-0"><i class="icon-basket me-2"></i> Tüm Siparişler</a>
+                    </div>
+                    <div class="col-sm-6 col-md-3 p-3 text-center btn-wrapper">
+                        <a href="/Admin/Categories" class="btn px-0"><i class="icon-grid me-2"></i> Kategoriler</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+  
+    <div class="row">
+        <div class="col-md-12 grid-margin">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="d-sm-flex align-items-baseline report-summary-header">
+                                <h5 class="font-weight-semibold">Sistem Genel Durumu</h5>
+                                <span class="ms-auto">Canlı Veriler</span>
+                                <button class="btn btn-icons border-0 p-2" onclick="location.reload()"><i class="icon-refresh"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row report-inner-cards-wrapper">
+                        <div class="col-md-6 col-xl report-inner-card">
+                            <div class="inner-card-text">
+                                <span class="report-title">TOPLAM RESTORAN</span>
+                                <h4>@ViewBag.TotalRestaurants</h4>
+                                <span class="report-count">Kayıtlı restoranlar</span>
+                            </div>
+                            <div class="inner-card-icon bg-success">
+                                <i class="icon-home"></i>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-xl report-inner-card">
+                            <div class="inner-card-text">
+                                <span class="report-title">ONAY BEKLEYENLERİ</span>
+                                <h4>@ViewBag.PendingRestaurants</h4>
+                                <span class="report-count">Onay bekleyen</span>
+                            </div>
+                            <div class="inner-card-icon bg-warning">
+                                <i class="icon-clock"></i>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-xl report-inner-card">
+                            <div class="inner-card-text">
+                                <span class="report-title">TOPLAM KULLANICI</span>
+                                <h4>@ViewBag.TotalUsers</h4>
+                                <span class="report-count">Kayıtlı kullanıcılar</span>
+                            </div>
+                            <div class="inner-card-icon bg-info">
+                                <i class="icon-people"></i>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-xl report-inner-card">
+                            <div class="inner-card-text">
+                                <span class="report-title">TOPLAM SİPARİŞ</span>
+                                <h4>@ViewBag.TotalOrders</h4>
+                                <span class="report-count">Verilen siparişler</span>
+                            </div>
+                            <div class="inner-card-icon bg-primary">
+                                <i class="icon-basket"></i>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-xl report-inner-card">
+                            <div class="inner-card-text">
+                                <span class="report-title">TOPLAM CİRO</span>
+                                <h4>@ViewBag.TotalRevenue ₺</h4>
+                                <span class="report-count">Genel ciro</span>
+                            </div>
+                            <div class="inner-card-icon bg-danger">
+                                <i class="icon-wallet"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+   
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Onay Bekleyen Restoranlar</h4>
+                    <a href="/Admin/Restaurants" class="btn btn-warning btn-sm float-end">Tümünü Gör</a>
+                    <div class="table-responsive mt-3">
+                        <p class="text-muted">Onay bekleyen restoranlar için Restoranları Yönet sayfasını ziyaret edin.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Sistem Özeti</h4>
+                    <div class="mt-3">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Aktif Restoranlar</span>
+                            <span class="badge badge-success">@ViewBag.TotalRestaurants</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Toplam Kullanıcılar</span>
+                            <span class="badge badge-info">@ViewBag.TotalUsers</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Toplam Siparişler</span>
+                            <span class="badge badge-primary">@ViewBag.TotalOrders</span>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <span>Sistem Durumu</span>
+                            <span class="badge badge-success">Online</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

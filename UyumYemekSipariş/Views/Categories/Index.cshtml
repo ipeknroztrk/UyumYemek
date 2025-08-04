@@ -1,0 +1,175 @@
+﻿@model List<UyumYemekSipariş.Models.Category>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/_RestaurantOwnerLayout.cshtml";
+}
+
+<div class="col-lg-12 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h4 class="card-title">Kategoriler</h4>
+                <a href="/Categories/Ekle" class="btn btn-primary">Yeni Kategori</a>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>İkon</th>
+                            <th>Kategori Adı</th>
+                            <th>Açıklama</th>
+                            <th>İşlemler</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@item.CategoryID</td>
+                                <td>
+                                    @if (!string.IsNullOrEmpty(item.IconUrl))
+                                    {
+                                        <img src="@item.IconUrl" alt="Kategori İkonu" style="width: 40px; height: 40px; object-fit: cover; border-radius: 5px;" />
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">Resim yok</span>
+                                    }
+                                </td>
+                                <td>@item.Name</td>
+                                <td>@item.Description</td>
+                                <td>
+                                    <button class="btn btn-sm btn-warning me-2" onclick="guncelleModal(@item.CategoryID, '@item.Name', '@item.Description', '@item.IconUrl')" title="Düzenle">
+                                        Düzenle
+                                    </button>
+                                    <button class="btn btn-sm btn-danger" onclick="silKategori(@item.CategoryID)" title="Sil">
+                                        Sil
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="guncelleModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Kategori Güncelle</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="guncelleForm">
+                    <input type="hidden" id="updateCategoryId" />
+                    <div class="form-group">
+                        <label>Kategori Adı</label>
+                        <input type="text" id="updateName" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label>Açıklama</label>
+                        <textarea id="updateDescription" class="form-control" rows="3"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>İkon URL</label>
+                        <input type="text" id="updateIconUrl" class="form-control" />
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">İptal</button>
+                <button type="button" class="btn btn-primary" onclick="guncelle()">Güncelle</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="silModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Kategori Sil</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Bu kategoriyi silmek istediğinizden emin misiniz?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">İptal</button>
+                <button type="button" class="btn btn-danger" id="confirmSil">Sil</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        let silId = 0;
+
+        window.guncelleModal = function (id, name, description, iconUrl) {
+            $('#updateCategoryId').val(id);
+            $('#updateName').val(name);
+            $('#updateDescription').val(description);
+            $('#updateIconUrl').val(iconUrl);
+            $('#guncelleModal').modal('show');
+        }
+
+        window.guncelle = function () {
+            $.ajax({
+                url: '/Categories/Guncelle',
+                type: 'POST',
+                data: {
+                    CategoryId: $('#updateCategoryId').val(),
+                    Name: $('#updateName').val(),
+                    Description: $('#updateDescription').val(),
+                    IconUrl: $('#updateIconUrl').val()
+                },
+                success: function (result) {
+                    if (result.sonuc == 0) {
+                        alert('Kategori güncellendi!');
+                        location.reload();
+                    }
+                    $('#guncelleModal').modal('hide');
+                },
+                error: function () {
+                    alert('Bir hata oluştu!');
+                }
+            });
+        }
+
+        window.silKategori = function (id) {
+            silId = id;
+            $('#silModal').modal('show');
+        }
+
+        $('#confirmSil').click(function () {
+            $.ajax({
+                url: '/Categories/Sil',
+                type: 'POST',
+                data: { id: silId },
+                success: function (result) {
+                    if (result.sonuc == 0) {
+                        alert(result.mesaj);
+                        location.reload();
+                    } else {
+                        alert(result.mesaj);
+                    }
+                    $('#silModal').modal('hide');
+                },
+                error: function () {
+                    alert('Bir hata oluştu!');
+                    $('#silModal').modal('hide');
+                }
+            });
+        });
+    });
+</script>

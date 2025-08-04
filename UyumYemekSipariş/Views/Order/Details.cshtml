@@ -1,0 +1,87 @@
+﻿@model UyumYemekSipariş.Models.Order
+@{
+    ViewBag.Title = "Sipariş Detayı";
+    Layout = "~/Views/_UserLayout.cshtml";
+    var siparisDetaylari = ViewBag.SiparisDetaylari as List<UyumYemekSipariş.Models.OrderDetail>;
+}
+
+<link href="~/wwwroot/css/Order.css" rel="stylesheet" />
+
+<div class="detay-container">
+    <a href="/Order/Index" class="geri-buton">← Siparişlerime Dön</a>
+
+    <div class="detay-kart">
+        <div class="siparis-header">
+            <h1>🍽️ <span class="vurgu">Sipariş</span> #@Model.OrderID</h1>
+            <p><strong>Sipariş Tarihi:</strong> @Model.OrderDate.Value.ToString("dd MMMM yyyy, HH:mm")</p>
+        
+        </div>
+
+        <div class="bilgi-grid">
+            <div class="bilgi-kutu">
+                <h4>🏪 Restoran</h4>
+                <p>@ViewBag.RestoranAdi</p>
+            </div>
+            <div class="bilgi-kutu">
+                <h4>💳 Ödeme Yöntemi</h4>
+                <p>@Model.PaymentMethod</p>
+            </div>
+            <div class="bilgi-kutu">
+                <h4>📝 Notlar</h4>
+                <p>@(String.IsNullOrEmpty(Model.Notes) ? "Not yok" : Model.Notes)</p>
+            </div>
+        </div>
+
+        <div class="urun-bolumu">
+            <h3>📦 Sipariş İçeriği</h3>
+            @if (siparisDetaylari != null && siparisDetaylari.Count > 0)
+            {
+                foreach (var detay in siparisDetaylari)
+                {
+                    <div class="urun-satir">
+                        <div class="urun-bilgi">
+                            <h5>@(detay.Product != null ? detay.Product.Name : "Ürün #" + detay.ProductID)</h5>
+                            <small>Adet: @detay.Quantity</small>
+                        </div>
+                        <div class="urun-fiyat">@(detay.TotalPrice.HasValue ? detay.TotalPrice.Value.ToString("F2") : "0.00") TL</div>
+                    </div>
+                }
+            }
+            else
+            {
+                <p style="text-align: center; color: #7f8c8d;">Sipariş detayları bulunamadı.</p>
+            }
+        </div>
+
+        <div class="hesap-bolumu">
+            <h3>💰 Hesap Özeti</h3>
+            <div class="hesap-satir">
+                <span>Ara Toplam:</span>
+                <span>@(Model.SubTotal.HasValue ? Model.SubTotal.Value.ToString("F2") : "0.00") TL</span>
+            </div>
+            <div class="hesap-satir">
+                <span>Teslimat Ücreti:</span>
+                <span>@(Model.DeliveryFee.HasValue ? Model.DeliveryFee.Value.ToString("F2") : "0.00") TL</span>
+            </div>
+            <div class="hesap-satir genel-toplam">
+                <span>Genel Toplam:</span>
+                <span>@(Model.TotalAmount.HasValue ? Model.TotalAmount.Value.ToString("F2") : "0.00") TL</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+@functions {
+    public string GetDurumText(string durum)
+    {
+        switch (durum?.ToLower())
+        {
+            case "pending": return "Beklemede";
+            case "confirmed": return "Onaylandı";
+            case "preparing": return "Hazırlanıyor";
+            case "delivered": return "Teslim Edildi";
+            case "cancelled": return "İptal Edildi";
+            default: return "Bilinmiyor";
+        }
+    }
+}

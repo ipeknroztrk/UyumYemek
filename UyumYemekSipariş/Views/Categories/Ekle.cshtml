@@ -1,0 +1,40 @@
+﻿
+@model UyumYemekSipariş.Models.Category
+
+@{
+    ViewBag.Title = "Ekle";
+    Layout = "~/Views/_RestaurantOwnerLayout.cshtml";
+}
+
+
+
+<div class="col-12 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Kategori Ekle</h4>
+            <p class="card-description">Kategori bilgilerini giriniz</p>
+
+            <form action="/Categories/Ekle" method="post" class="forms-sample">
+                <input type="hidden" name="CategoryId" value="@(Model?.CategoryID ?? 0)" />
+
+                <div class="form-group">
+                    <label for="Name">Kategori Adı</label>
+                    <input type="text" name="Name" value="@(Model?.Name ?? "")" class="form-control" placeholder="Kategori adını giriniz" />
+                </div>
+
+                <div class="form-group">
+                    <label for="Description">Açıklama</label>
+                    <textarea name="Description" class="form-control" rows="4" placeholder="Kategori açıklamasını giriniz">@(Model?.Description ?? "")</textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="IconUrl">İkon URL</label>
+                    <input type="text" name="IconUrl" value="@(Model?.IconUrl ?? "")" class="form-control" placeholder="İkon URL'sini giriniz" />
+                </div>
+
+                <button type="submit" class="btn btn-primary me-2">Kaydet</button>
+                <a href="/Categories/Index" class="btn btn-light">İptal</a>
+            </form>
+        </div>
+    </div>
+</div>

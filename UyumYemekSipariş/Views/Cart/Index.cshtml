@@ -1,0 +1,481 @@
+﻿@{
+    ViewBag.Title = "Sepetim";
+    Layout = "~/Views/_UserLayout.cshtml";
+}
+
+<section class="py-5">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="d-flex align-items-center mb-4">
+                    <h2 class="mb-0 me-3">
+                        <svg width="32" height="32" class="me-2 text-warning"><use xlink:href="#cart"></use></svg>
+                        Sepetim
+                    </h2>
+                    <span id="cart-item-count" class="badge bg-warning fs-6">0 ürün</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="card shadow-sm border-0">
+                    <div class="card-header bg-light">
+                        <h5 class="mb-0">Sepet Detayları</h5>
+                        <div id="restaurant-info" style="display: none;">
+                            <span class="badge bg-warning">📍 <span id="restaurant-name"></span></span>
+                        </div>
+                    </div>
+                    <div class="card-body p-0">
+                        <div id="empty-cart" class="text-center py-5">
+                            <h4 class="text-muted mb-3">Sepetiniz Boş</h4>
+                            <p class="text-muted mb-4">Lezzetli ürünlerimizi keşfetmek için alışverişe başlayın!</p>
+                            <div class="d-flex gap-3 justify-content-center">
+                                <a href="@Url.Action("Index", "Product")" class="btn btn-warning">Ürünleri Keşfet</a>
+                                <a href="@Url.Action("Index", "Restaurant")" class="btn btn-outline-warning">Restoranlar</a>
+                            </div>
+                        </div>
+                        <div id="cart-items" style="display: none;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="card shadow-sm border-0" id="order-summary" style="display: none;">
+                    <div class="card-header bg-warning text-dark">
+                        <h5 class="mb-0">Sipariş Özeti</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Ara Toplam:</span>
+                            <span id="subtotal">0.00 TL</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Teslimat Ücreti:</span>
+                            <span id="delivery-fee">5.00 TL</span>
+                        </div>
+                        <hr>
+                        <div class="d-flex justify-content-between mb-3">
+                            <strong>Toplam:</strong>
+                            <strong class="text-warning" id="total-amount">0.00 TL</strong>
+                        </div>
+
+                        <div class="mb-3">
+                            <h6 class="fw-bold">Teslimat Bilgileri</h6>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="delivery-type" id="delivery" value="delivery" checked>
+                                <label class="form-check-label" for="delivery">Teslimat (5.00 TL)</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="delivery-type" id="pickup" value="pickup">
+                                <label class="form-check-label" for="pickup">Gel Al (Ücretsiz)</label>
+                            </div>
+                        </div>
+
+                        <button class="btn btn-warning w-100 btn-lg fw-bold" onclick="proceedToPayment()">
+                            Ödemeyi Tamamla
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+<div class="modal fade" id="paymentModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-warning">
+                <h5 class="modal-title">Ödeme Bilgileri</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="paymentForm">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6 class="mb-3">Kart Bilgileri</h6>
+                            <div class="mb-3">
+                                <label class="form-label">Kart Üzerindeki İsim</label>
+                                <input type="text" class="form-control" id="cardName" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Kart Numarası</label>
+                                <input type="text" class="form-control" id="cardNumber" maxlength="19" placeholder="1234 5678 9012 3456" required>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label class="form-label">Son Kullanma Tarihi</label>
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <input type="text" class="form-control" placeholder="MM" maxlength="2" id="expiryMonth" required>
+                                        </div>
+                                        <div class="col-6">
+                                            <input type="text" class="form-control" placeholder="YY" maxlength="2" id="expiryYear" required>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">CVV</label>
+                                    <input type="text" class="form-control" maxlength="3" id="cvv" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="mb-3">Sipariş Özeti</h6>
+                            <div class="bg-light p-3 rounded">
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>Ara Toplam:</span>
+                                    <span id="modal-subtotal">0.00 TL</span>
+                                </div>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>Teslimat Ücreti:</span>
+                                    <span id="modal-delivery">0.00 TL</span>
+                                </div>
+                                <hr>
+                                <div class="d-flex justify-content-between">
+                                    <strong>Toplam:</strong>
+                                    <strong class="text-warning" id="modal-total">0.00 TL</strong>
+                                </div>
+                            </div>
+                            <div class="mt-3">
+                                <h6>Ödeme Yöntemi</h6>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="paymentMethod" value="Kredi Kartı" id="creditCard" checked>
+                                    <label class="form-check-label" for="creditCard">
+                                        💳 Kredi Kartı
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="paymentMethod" value="Banka Kartı" id="debitCard">
+                                    <label class="form-check-label" for="debitCard">
+                                        💳 Banka Kartı
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="acceptTerms" required>
+                            <label class="form-check-label" for="acceptTerms">
+                                <small>Satış sözleşmesini ve gizlilik politikasını okudum, kabul ediyorum.</small>
+                            </label>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+                <button type="button" class="btn btn-warning" onclick="completePayment(event)">
+                    🔒 Ödemeyi Tamamla
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+    //sepetteki ürünlerin toplam fiyatını hesaplar
+    function proceedToPayment() {
+        if (!window.cart || window.cart.length === 0) {
+            alert('Sepetiniz boş!');
+            return;
+        }
+
+      
+        const subtotal = window.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+        const deliveryType = document.querySelector('input[name="delivery-type"]:checked').value;
+        const deliveryFee = deliveryType === 'delivery' ? 5.00 : 0.00;
+        const total = subtotal + deliveryFee;
+
+        document.getElementById('modal-subtotal').textContent = subtotal.toFixed(2) + ' TL';
+        document.getElementById('modal-delivery').textContent = deliveryFee.toFixed(2) + ' TL';
+        document.getElementById('modal-total').textContent = total.toFixed(2) + ' TL';
+
+      
+        var paymentModal = new bootstrap.Modal(document.getElementById('paymentModal'));
+        paymentModal.show();
+    }
+
+
+function completePayment(event) {
+
+    
+    const form = document.getElementById('paymentForm');
+    if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+    }
+
+    // Kart numarasını kontrol et
+    const cardNumber = document.getElementById('cardNumber').value.replace(/\s/g, '');
+    if (cardNumber === '4444' || cardNumber === '4444444444444444') {
+        alert('Geçersiz kart numarası!');
+        return;
+    }
+
+    // Ödeme bilgilerini hazırla
+    const subtotal = window.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    const deliveryType = document.querySelector('input[name="delivery-type"]:checked').value;
+    const deliveryFee = deliveryType === 'delivery' ? 5.00 : 0.00;
+    const total = subtotal + deliveryFee;
+
+    
+    const restaurantId = window.cart[0].restaurantId || 1;
+
+    
+    const btn = event.target;
+    const originalText = btn.innerHTML;
+    btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>İşleniyor...';
+    btn.disabled = true;
+
+    // AJAX ile ödeme işlemi
+    $.ajax({
+        url: '@Url.Action("ProcessPayment", "Payment")',
+        type: 'POST',
+        data: {
+            cartData: JSON.stringify(window.cart),
+            restaurantId: restaurantId,
+            subTotal: subtotal,
+            deliveryFee: deliveryFee,
+            totalAmount: total,
+            paymentMethod: document.querySelector('input[name="paymentMethod"]:checked').value
+        },
+        success: function(data) {
+            if (data.success) {
+              
+                alert(data.message);
+
+              
+                localStorage.removeItem('cart');
+                localStorage.removeItem('currentRestaurantName');
+                window.cart = [];
+
+               
+                $('#paymentModal').modal('hide');
+
+               
+                setTimeout(function() {
+                    window.location.href = '@Url.Action("Index", "Default")';
+                }, 1000);
+            } else {
+               
+                alert(data.message);
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }
+        },
+        error: function() {
+            alert('Ödeme işlemi sırasında bir hata oluştu.');
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+        }
+    });
+}
+
+
+
+</script>
+
+
+<script>
+
+document.addEventListener('DOMContentLoaded', function() {
+    if (typeof cart === 'undefined') {
+        window.cart = [];
+    }
+    if (typeof currentRestaurantName === 'undefined') {
+        window.currentRestaurantName = '';
+    }
+
+    var serverCartData = '@Html.Raw(ViewBag.CartData ?? "null")';
+    var serverRestaurantName = '@Html.Raw(ViewBag.RestaurantName ?? "")';
+
+    if (serverCartData && serverCartData !== 'null' && serverCartData !== '') {
+        try {
+            window.cart = JSON.parse(serverCartData);
+            window.currentRestaurantName = serverRestaurantName;
+            localStorage.setItem('cart', JSON.stringify(window.cart));
+            localStorage.setItem('currentRestaurantName', window.currentRestaurantName);
+        } catch (e) {
+            loadFromLocalStorage();
+        }
+    } else {
+        loadFromLocalStorage();
+    }
+
+    displayCartPage();
+
+    document.querySelectorAll('input[name="delivery-type"]').forEach(radio => {
+        radio.addEventListener('change', updateTotal);
+    });
+});
+    //sepet verilerini okur
+
+function loadFromLocalStorage() {
+    var localCart = localStorage.getItem('cart');
+    var localRestaurantName = localStorage.getItem('currentRestaurantName');
+
+    if (localCart) {
+        try {
+            window.cart = JSON.parse(localCart);
+            window.currentRestaurantName = localRestaurantName || '';
+        } catch (e) {
+            window.cart = [];
+            window.currentRestaurantName = '';
+        }
+    } else {
+        window.cart = [];
+        window.currentRestaurantName = '';
+    }
+}
+ //Sepet boşsa boş sepet görünümü doluysa sepet içeriğini gösterir
+function displayCartPage() {
+    if (window.cart && window.cart.length > 0) {
+        showCartItems();
+    } else {
+        showEmptyCart();
+    }
+}
+
+function showCartItems() {
+    document.getElementById('empty-cart').style.display = 'none';
+    document.getElementById('cart-items').style.display = 'block';
+    document.getElementById('order-summary').style.display = 'block';
+    document.getElementById('restaurant-info').style.display = 'block';
+
+    if (window.currentRestaurantName) {
+        document.getElementById('restaurant-name').textContent = window.currentRestaurantName;
+    }
+
+    const totalItems = window.cart.reduce((sum, item) => sum + item.quantity, 0);
+    document.getElementById('cart-item-count').textContent = totalItems + ' ürün';
+
+    displayCartItems();
+    updateTotal();
+}
+
+function showEmptyCart() {
+    document.getElementById('empty-cart').style.display = 'block';
+    document.getElementById('cart-items').style.display = 'none';
+    document.getElementById('order-summary').style.display = 'none';
+    document.getElementById('restaurant-info').style.display = 'none';
+    document.getElementById('cart-item-count').textContent = '0 ürün';
+}
+    // Sepetteki her ürün için HTML oluşturur 
+    function displayCartItems() {
+        const cartItemsContainer = document.getElementById('cart-items');
+        let html = '';
+
+        window.cart.forEach(item => {
+            html += `
+            <div class="cart-item border-bottom p-3">
+                <div class="row align-items-center">
+                    <div class="col-md-2">
+                        <img src="${item.image}" alt="${item.name}" class="img-fluid rounded" style="width: 80px; height: 80px; object-fit: cover;">
+                    </div>
+                    <div class="col-md-4">
+                        <h6 class="mb-1">${item.name}</h6>
+                        <small class="text-muted">${item.category}</small>
+                        <div class="text-warning fw-bold">${item.price.toFixed(2)} TL</div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="quantity-controls">
+                            <button class="quantity-btn" onclick="updateCartItemQuantity(${item.id}, ${item.quantity - 1})">-</button>
+                            <input type="number" class="quantity-input" value="${item.quantity}" onchange="updateCartItemQuantity(${item.id}, this.value)" min="1">
+                            <button class="quantity-btn" onclick="updateCartItemQuantity(${item.id}, ${item.quantity + 1})">+</button>
+                        </div>
+                    </div>
+                    <div class="col-md-2 text-end">
+                        <div class="fw-bold">${(item.price * item.quantity).toFixed(2)} TL</div>
+                    </div>
+                    <div class="col-md-1 text-end">
+                        <span class="remove-item" onclick="removeCartItem(${item.id})">🗑️</span>
+                    </div>
+                </div>
+            </div>
+        `;
+        });
+
+        cartItemsContainer.innerHTML = html;
+    }
+
+function updateTotal() {
+    const subtotal = window.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    const deliveryType = document.querySelector('input[name="delivery-type"]:checked').value;
+    const deliveryFee = deliveryType === 'delivery' ? 5.00 : 0.00;
+    const total = subtotal + deliveryFee;
+
+    document.getElementById('subtotal').textContent = subtotal.toFixed(2) + ' TL';
+    document.getElementById('delivery-fee').textContent = deliveryFee.toFixed(2) + ' TL';
+    document.getElementById('total-amount').textContent = total.toFixed(2) + ' TL';
+}
+
+function updateCartItemQuantity(itemId, newQuantity) {
+    newQuantity = parseInt(newQuantity);
+
+    if (newQuantity < 1) {
+        removeCartItem(itemId);
+        return;
+    }
+
+    const item = window.cart.find(i => i.id === itemId);
+    if (item) {
+        item.quantity = newQuantity;
+        localStorage.setItem('cart', JSON.stringify(window.cart));
+        displayCartPage();
+
+        if (typeof updateCartDisplay === 'function') {
+            updateCartDisplay();
+        }
+    }
+}
+
+function removeCartItem(itemId) {
+    if (confirm('Bu ürünü sepetten kaldırmak istediğinizden emin misiniz?')) {
+        if (typeof removeFromCart === 'function') {
+            removeFromCart(itemId);
+            displayCartPage();
+        }
+    }
+}
+
+</script>
+
+<style>
+    .cart-item:hover {
+        background-color: #f8f9fa;
+    }
+
+    .quantity-controls {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .quantity-btn {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        border: 1px solid #dee2e6;
+        background: white;
+        cursor: pointer;
+    }
+
+    .quantity-input {
+        width: 50px;
+        text-align: center;
+        border: 1px solid #dee2e6;
+        border-radius: 5px;
+        padding: 5px;
+    }
+
+    .remove-item {
+        color: #dc3545;
+        cursor: pointer;
+    }
+</style>

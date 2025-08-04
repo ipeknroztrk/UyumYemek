@@ -1,0 +1,211 @@
+﻿@model List<UyumYemekSipariş.Models.Product>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/_RestaurantOwnerLayout.cshtml";
+}
+
+
+<div class="col-lg-12 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h4 class="card-title">Ürünler</h4>
+                <a href="/RProduct/Ekle" class="btn btn-primary">Yeni Ürün</a>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Resim</th>
+                            <th>Ürün Adı</th>
+                            <th>Açıklama</th>
+                            <th>Fiyat</th>
+                            <th>Kategori</th>
+                            <th>Durum</th>
+                            <th>İşlemler</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@item.ProductID</td>
+                                <td>
+                                    @if (!string.IsNullOrEmpty(item.ImagePath))
+                                    {
+                                        <img src="@item.ImagePath" alt="Ürün Resmi" style="width: 40px; height: 40px; object-fit: cover; border-radius: 5px;" />
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">Resim yok</span>
+                                    }
+                                </td>
+                                <td>@item.Name</td>
+                                <td>@item.Description</td>
+                                <td>@item.Price ₺</td>
+                                <td>@(item.Category?.Name ?? "Kategori Yok")</td>
+                                <td>
+                                    @if (item.IsAvailable == true)
+                                    {
+                                        <span class="badge badge-success">Aktif</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge badge-danger">Pasif</span>
+                                    }
+                                </td>
+                                <td>
+                                    <a href="/RProduct/Ekle/@item.ProductID" class="btn btn-sm btn-warning me-2" title="Düzenle">
+                                        Düzenle
+                                    </a>
+                                    <button class="btn btn-sm btn-danger" onclick="silUrun(@item.ProductID)" title="Sil">
+                                        Sil
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="guncelleModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Ürün Güncelle</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="guncelleForm">
+                    <input type="hidden" id="updateProductID" />
+                    <div class="form-group">
+                        <label>Ürün Adı</label>
+                        <input type="text" id="updateName" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label>Açıklama</label>
+                        <textarea id="updateDescription" class="form-control" rows="3"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Fiyat</label>
+                        <input type="number" id="updatePrice" class="form-control" step="0.01" />
+                    </div>
+                    <div class="form-group">
+                        <label>Kategori</label>
+                        <select id="updateCategoryID" class="form-control">
+                            @foreach (var cat in ViewBag.Categories)
+                            {
+                                <option value="@cat.CategoryID">@cat.Name</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Resim URL</label>
+                        <input type="text" id="updateImageUrl" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="updateIsAvailable" /> Aktif
+                        </label>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">İptal</button>
+                <button type="button" class="btn btn-primary" onclick="guncelle()">Güncelle</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Silme Modal -->
+<div class="modal fade" id="silModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Ürün Sil</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Bu ürünü silmek istediğinizden emin misiniz?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">İptal</button>
+                <button type="button" class="btn btn-danger" id="confirmSil">Sil</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        let silId = 0;
+
+        window.guncelleModal = function (id, name, description, price, categoryId, imageUrl, isAvailable) {
+            $('#updateProductID').val(id);
+            $('#updateName').val(name);
+            $('#updateDescription').val(description);
+            $('#updatePrice').val(price);
+            $('#updateCategoryID').val(categoryId);
+            $('#updateImageUrl').val(imageUrl);
+            $('#updateIsAvailable').prop('checked', isAvailable);
+            $('#guncelleModal').modal('show');
+        }
+
+        window.guncelle = function () {
+            $.ajax({
+                url: '/RProduct/Guncelle',
+                type: 'POST',
+                data: {
+                    ProductID: $('#updateProductID').val(),
+                    Name: $('#updateName').val(),
+                    Description: $('#updateDescription').val(),
+                    Price: $('#updatePrice').val(),
+                    CategoryID: $('#updateCategoryID').val(),
+                    ImagePath: $('#updateImageUrl').val(),  // ImagePath olmalı
+                    IsAvailable: $('#updateIsAvailable').is(':checked')
+                },
+                success: function (result) {
+                    $('#guncelleModal').modal('hide');
+                    if (result.sonuc == 0) {
+                        location.reload();
+                    }
+                },
+                error: function () {
+                    $('#guncelleModal').modal('hide');
+                }
+            });
+        }
+
+        window.silUrun = function (id) {
+            silId = id;
+            $('#silModal').modal('show');
+        }
+
+        $('#confirmSil').click(function () {
+            $.ajax({
+                url: '/RProduct/Sil',
+                type: 'POST',
+                data: { id: silId },
+                success: function (result) {
+                    $('#silModal').modal('hide');
+                    if (result.sonuc == 0) {
+                        location.reload();
+                    }
+                },
+                error: function () {
+                    $('#silModal').modal('hide');
+                }
+            });
+        });
+    });
+</script>

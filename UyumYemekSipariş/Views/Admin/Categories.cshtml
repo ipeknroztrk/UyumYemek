@@ -1,0 +1,93 @@
+﻿@model List<UyumYemekSipariş.Models.Category>
+
+@{
+    ViewBag.Title = "Kategorileri Yönet";
+    Layout = "~/Views/_AdminLayout.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-sm-flex align-items-center mb-4">
+                    <h4 class="card-title mb-sm-0">Tüm Kategoriler</h4>
+                    <a href="/Admin/Index" class="text-dark ms-auto mb-3 mb-sm-0">Dashboard'a Dön</a>
+                </div>
+                <div class="table-responsive border rounded p-1">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th class="font-weight-bold">ID</th>
+                                <th class="font-weight-bold">İkon</th>
+                                <th class="font-weight-bold">Kategori Adı</th>
+                                <th class="font-weight-bold">Açıklama</th>
+                                <th class="font-weight-bold">Oluşturma Tarihi</th>
+                            
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>@item.CategoryID</td>
+                                    <td>
+                                        @if (!string.IsNullOrEmpty(item.IconUrl))
+                                        {
+                                            <img src="@item.IconUrl" alt="@item.Name" class="rounded" style="width: 40px; height: 40px; object-fit: cover;" />
+                                        }
+                                        else
+                                        {
+                                            <div class="bg-light rounded d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                                                <i class="icon-grid text-muted"></i>
+                                            </div>
+                                        }
+                                    </td>
+                                    <td>
+                                        <strong>@item.Name</strong>
+                                    </td>
+                                    <td>@item.Description</td>
+                                    
+                                    <td>
+                                        <button class="btn btn-sm btn-danger" onclick="deleteCategory(@item.CategoryID)" title="Kategoriyi Sil">
+                                            <i class="icon-trash"></i> Sil
+                                        </button>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <div class="d-flex mt-4 flex-wrap align-items-center">
+                    <p class="text-muted mb-sm-0">Toplam @Model.Count kategori gösteriliyor</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+
+        window.deleteCategory = function (categoryId) {
+            if (confirm('Bu kategoriyi silmek istediğinizden emin misiniz? Bu kategoriye ait ürünler varsa silinemez!')) {
+                $.ajax({
+                    url: '/Admin/DeleteCategory',
+                    type: 'POST',
+                    data: { id: categoryId },
+                    success: function (result) {
+                        if (result.sonuc == 0) {
+                            alert(result.mesaj);
+                            location.reload();
+                        } else {
+                            alert(result.mesaj);
+                        }
+                    },
+                    error: function () {
+                        alert('Bir hata oluştu!');
+                    }
+                });
+            }
+        }
+    });
+</script>

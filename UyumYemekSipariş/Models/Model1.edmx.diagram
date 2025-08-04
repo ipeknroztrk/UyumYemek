@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="dbfe3a8b658a43c0a15e6f7ff98613c9" Name="Diagram1">
+        <EntityTypeShape EntityType="UyumYemekSiparisDBModel.Address" Width="1.5" PointX="3" PointY="8.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="UyumYemekSiparisDBModel.Cart" Width="1.5" PointX="3" PointY="12" IsExpanded="true" />
+        <EntityTypeShape EntityType="UyumYemekSiparisDBModel.Category" Width="1.5" PointX="3" PointY="23" IsExpanded="true" />
+        <EntityTypeShape EntityType="UyumYemekSiparisDBModel.Favorite" Width="1.5" PointX="8.25" PointY="15" IsExpanded="true" />
+        <EntityTypeShape EntityType="UyumYemekSiparisDBModel.OrderDetail" Width="1.5" PointX="10.5" PointY="16.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="UyumYemekSiparisDBModel.Order" Width="1.5" PointX="5.25" PointY="13" IsExpanded="true" />
+        <EntityTypeShape EntityType="UyumYemekSiparisDBModel.Payment" Width="1.5" PointX="7.5" PointY="18.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="UyumYemekSiparisDBModel.Product" Width="1.5" PointX="5.25" PointY="18.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="UyumYemekSiparisDBModel.Restaurant" Width="1.5" PointX="3" PointY="17.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="UyumYemekSiparisDBModel.Review" Width="1.5" PointX="10.5" PointY="11.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="UyumYemekSiparisDBModel.sysdiagram" Width="1.5" PointX="2.25" PointY="3" IsExpanded="false" />
+        <EntityTypeShape EntityType="UyumYemekSiparisDBModel.User" Width="1.5" PointX="0.75" PointY="10.25" IsExpanded="true" />
+        <AssociationConnector Association="UyumYemekSiparisDBModel.FK__Addresses__UserI__286302EC" ManuallyRouted="false" />
+        <AssociationConnector Association="UyumYemekSiparisDBModel.FK__Orders__AddressI__37A5467C" ManuallyRouted="false" />
+        <AssociationConnector Association="UyumYemekSiparisDBModel.FK__Cart__ProductID__46E78A0C" ManuallyRouted="false" />
+        <AssociationConnector Association="UyumYemekSiparisDBModel.FK__Cart__UserID__45F365D3" ManuallyRouted="false" />
+        <AssociationConnector Association="UyumYemekSiparisDBModel.FK__Products__Catego__31EC6D26" ManuallyRouted="false" />
+        <AssociationConnector Association="UyumYemekSiparisDBModel.FK__Favorites__Resta__4F7CD00D" ManuallyRouted="false" />
+        <AssociationConnector Association="UyumYemekSiparisDBModel.FK__Favorites__UserI__4E88ABD4" ManuallyRouted="false" />
+        <AssociationConnector Association="UyumYemekSiparisDBModel.FK__OrderDeta__Order__3B75D760" ManuallyRouted="false" />
+        <AssociationConnector Association="UyumYemekSiparisDBModel.FK__OrderDeta__Produ__3C69FB99" ManuallyRouted="false" />
+        <AssociationConnector Association="UyumYemekSiparisDBModel.FK__Orders__Customer__35BCFE0A" ManuallyRouted="false" />
+        <AssociationConnector Association="UyumYemekSiparisDBModel.FK__Orders__Restaura__36B12243" ManuallyRouted="false" />
+        <AssociationConnector Association="UyumYemekSiparisDBModel.FK__Payments__OrderI__4AB81AF0" ManuallyRouted="false" />
+        <AssociationConnector Association="UyumYemekSiparisDBModel.FK__Reviews__OrderID__412EB0B6" ManuallyRouted="false" />
+        <AssociationConnector Association="UyumYemekSiparisDBModel.FK__Products__Restau__30F848ED" ManuallyRouted="false" />
+        <AssociationConnector Association="UyumYemekSiparisDBModel.FK__Restauran__Owner__2B3F6F97" ManuallyRouted="false" />
+        <AssociationConnector Association="UyumYemekSiparisDBModel.FK__Reviews__Restaur__403A8C7D" ManuallyRouted="false" />
+        <AssociationConnector Association="UyumYemekSiparisDBModel.FK__Reviews__Custome__3F466844" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

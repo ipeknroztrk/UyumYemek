@@ -1,0 +1,16 @@
+/* Toast */
+
+.jq-toast-wrap {
+    .jq-icon-success {
+        background-color: theme-color("success");
+    }
+    .jq-icon-info {
+        background-color: theme-color("info");
+    }
+    .jq-icon-primary {
+        background-color: theme-color("primary");
+    }
+    .jq-icon-error {
+        background-color: theme-color("danger");
+    }
+}

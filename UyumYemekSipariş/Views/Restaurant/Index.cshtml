@@ -1,0 +1,48 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/_UserLayout.cshtml";
+}
+@model List<UyumYemekSipariş.Models.Restaurant>
+
+<section class="py-5">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="section-header d-flex flex-wrap justify-content-between mb-5">
+                    <h2 class="section-title">Restoranlar</h2>
+                    <div class="d-flex align-items-center">
+    
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            @foreach (var item in Model)
+            {
+                <div class="col-lg-3 col-md-6 col-sm-6 col-12 mb-4">
+                    <a href="@Url.Action("Details", "Restaurant", new { id = item.RestaurantID })" class="text-decoration-none">
+                        <div class="card h-100 p-3 rounded-4 shadow border-0 hover-card">
+                            <div class="card-body">
+                                <h5 style="color: #FFD700; font-weight: bold;">@item.Name</h5>
+                                <h6 class="text-muted mb-2">@item.Description</h6>
+                                <p class="card-text text-dark mb-0">
+                                    <i class="fas fa-map-marker-alt text-muted"></i> @item.Address
+                                </p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
+<style>
+.hover-card {
+    transition: transform 0.2s;
+}
+.hover-card:hover {
+    transform: translateY(-5px);
+}
+</style>

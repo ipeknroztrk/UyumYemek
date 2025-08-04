@@ -1,0 +1,311 @@
+﻿@model List<UyumYemekSipariş.Models.Product>
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/_UserLayout.cshtml";
+}
+
+<section class="py-5">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12 mb-4">
+                <div class="restaurant-header bg-gradient p-4 rounded-3 text-white mb-4" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                    <h2 class="mb-2" style="color: #FFD700; font-weight: bold;">
+                        <span class="me-2">🍴</span>@ViewBag.Restoran.Name
+                    </h2>
+                    <p class="text-white-50 mb-2">@ViewBag.Restoran.Description</p>
+                    <p class="mb-0"><i class="fas fa-map-marker-alt me-2"></i> @ViewBag.Restoran.Address</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="bootstrap-tabs product-tabs">
+                    <div class="tabs-header d-flex justify-content-between border-bottom my-5">
+                        <h3 class="d-flex align-items-center">
+                            <span class="me-2">🛍️</span>Ürünlerimiz
+                            <span class="badge bg-primary ms-2">@Model.Count ürün</span>
+                        </h3>
+                    </div>
+
+                    <div class="tab-content" id="nav-tabContent">
+                        <div class="tab-pane fade show active" id="nav-all" role="tabpanel" aria-labelledby="nav-all-tab">
+                            <div class="row">
+                                @foreach (var item in Model)
+                                {
+                                    <div class="col-lg-3 col-md-4 col-sm-6 col-12 mb-4">
+                                        <div class="product-item card h-100 shadow-sm border-0 restaurant-product"
+                                             data-restaurant-id="@ViewBag.Restoran.RestaurantID"
+                                             data-restaurant-name="@ViewBag.Restoran.Name">
+
+                                            <div class="position-relative">
+                                                <a href="#" class="btn-wishlist position-absolute top-0 end-0 m-2 z-index-2">
+                                                    <svg width="24" height="24" class="text-danger"><use xlink:href="#heart"></use></svg>
+                                                </a>
+
+                                                <figure class="mb-0">
+                                                    <a href="#" title="@item.Name">
+                                                        <img src="@item.ImagePath" class="card-img-top" style="height: 200px; object-fit: cover;">
+                                                    </a>
+                                                </figure>
+
+                                              
+                                                <div class="position-absolute top-0 start-0 m-2">
+                                                    <span class="badge bg-dark bg-opacity-75">
+                                                        @item.Category.Name
+                                                    </span>
+                                                </div>
+                                            </div>
+
+                                            <div class="card-body d-flex flex-column">
+                                                <h5 class="card-title mb-2">@item.Name</h5>
+                                                <p class="card-text text-muted small flex-grow-1">@item.Description</p>
+
+                                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                                    <div class="rating d-flex align-items-center">
+                                                        <svg width="16" height="16" class="text-primary me-1"><use xlink:href="#star-solid"></use></svg>
+                                                        <span class="small text-muted">4.5</span>
+                                                    </div>
+                                                    <span class="price h5 mb-0 text-primary fw-bold">@item.Price TL</span>
+                                                </div>
+
+                                                <div class="d-flex align-items-center justify-content-between mb-3">
+                                                    <div class="input-group product-qty" style="width: 120px;">
+                                                        <button class="btn btn-outline-secondary btn-sm quantity-minus" type="button">
+                                                            <svg width="16" height="16"><use xlink:href="#minus"></use></svg>
+                                                        </button>
+                                                        <input type="text" class="form-control form-control-sm text-center quantity-input" value="1" readonly>
+                                                        <button class="btn btn-outline-secondary btn-sm quantity-plus" type="button">
+                                                            <svg width="16" height="16"><use xlink:href="#plus"></use></svg>
+                                                        </button>
+                                                    </div>
+                                                </div>
+
+                                                <button class="btn btn-primary w-100 mt-auto add-to-cart-btn">
+                                                    <svg width="16" height="16" class="me-2"><use xlink:href="#cart"></use></svg>Sepete Ekle
+                                                </button>
+                                            </div>
+
+                                          
+                                            <input type="hidden" class="product-id" value="@item.ProductID">
+                                            <input type="hidden" class="product-name" value="@item.Name">
+                                            <input type="hidden" class="product-price" value="@item.Price">
+                                            <input type="hidden" class="product-image" value="@item.ImagePath">
+                                            <input type="hidden" class="product-category" value="@item.Category.Name">
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+
+                            @if (!Model.Any())
+                            {
+                                <div class="text-center py-5">
+                                    <div class="mb-3">
+                                        <svg width="64" height="64" class="text-muted" viewBox="0 0 24 24">
+                                            <path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
+                                        </svg>
+                                    </div>
+                                    <h5 class="text-muted">Bu restoranda henüz ürün bulunmuyor</h5>
+                                    <p class="text-muted">Yakında lezzetli ürünler eklenecek!</p>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+
+.restaurant-product {
+    transition: all 0.3s ease;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.restaurant-product:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+.restaurant-header {
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.quantity-input {
+    font-weight: bold;
+    background-color: #f8f9fa;
+    border-left: none;
+    border-right: none;
+}
+
+.product-qty .btn {
+    transition: all 0.2s ease;
+}
+
+.product-qty .btn:hover {
+    background-color: #007bff;
+    color: white;
+    border-color: #007bff;
+}
+
+.add-to-cart-btn {
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    border: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    border-radius: 8px;
+}
+
+.add-to-cart-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+    background: linear-gradient(135deg, #218838 0%, #1e7e34 100%);
+}
+
+.btn-wishlist {
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.btn-wishlist:hover {
+    background: rgba(220, 53, 69, 0.1);
+    transform: scale(1.1);
+}
+
+.z-index-2 {
+    z-index: 2;
+}
+
+.price {
+    color: #28a745 !important;
+}
+
+.badge.bg-dark {
+    background: rgba(0, 0, 0, 0.7) !important;
+}
+
+
+@@media (max-width: 768px) {
+    .restaurant-header {
+        text-align: center;
+    }
+
+    .restaurant-header h2 {
+        font-size: 1.5rem;
+    }
+
+    .product-qty {
+        width: 100px !important;
+    }
+}
+</style>
+
+<script>
+
+document.addEventListener('DOMContentLoaded', function() {
+    
+    document.querySelectorAll('.quantity-minus').forEach(button => {
+        button.addEventListener('click', function() {
+            const input = this.parentNode.querySelector('.quantity-input');
+            let value = parseInt(input.value) || 1;
+            if (value > 1) {
+                input.value = value - 1;
+            }
+        });
+    });
+
+    document.querySelectorAll('.quantity-plus').forEach(button => {
+        button.addEventListener('click', function() {
+            const input = this.parentNode.querySelector('.quantity-input');
+            let value = parseInt(input.value) || 1;
+            input.value = value + 1;
+        });
+    });
+
+   
+    document.querySelectorAll('.add-to-cart-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            const productCard = this.closest('.restaurant-product');
+
+
+            const productName = productCard.querySelector('.product-name').value;
+            const productPrice = parseFloat(productCard.querySelector('.product-price').value);
+            const productImage = productCard.querySelector('.product-image').value;
+            const productCategory = productCard.querySelector('.product-category').value;
+            const quantity = parseInt(productCard.querySelector('.quantity-input').value) || 1;
+
+           
+            const restaurantId = parseInt(productCard.getAttribute('data-restaurant-id'));
+            const restaurantName = productCard.getAttribute('data-restaurant-name');
+
+            
+            if (typeof canAddToCart === 'function' && typeof addToCart === 'function') {
+                if (canAddToCart(restaurantId, restaurantName)) {
+                    
+                    this.classList.add('loading');
+                    this.disabled = true;
+
+                  
+                    setTimeout(() => {
+                        addToCart({
+                            name: productName,
+                            price: productPrice,
+                            image: productImage,
+                            category: productCategory,
+                            quantity: quantity,
+                            restaurantId: restaurantId,
+                            restaurantName: restaurantName
+                        });
+
+                        productCard.querySelector('.quantity-input').value = 1;
+
+                      
+                        this.classList.remove('loading');
+                        this.disabled = false;
+
+                       
+                        if (typeof showSuccessMessage === 'function') {
+                            showSuccessMessage(productName);
+                        }
+
+                      
+                        this.style.transform = 'scale(0.95)';
+                        setTimeout(() => {
+                            this.style.transform = '';
+                        }, 150);
+
+                    }, 300);
+                } else {
+                  
+                    window.pendingProduct = {
+                        name: productName,
+                        price: productPrice,
+                        image: productImage,
+                        category: productCategory,
+                        quantity: quantity,
+                        restaurantId: restaurantId,
+                        restaurantName: restaurantName,
+                        quantityInput: productCard.querySelector('.quantity-input'),
+                        button: this
+                    };
+
+                  
+                }
+            } else {
+               
+                alert(`${productName} sepete eklendi! (${quantity} adet - ${(productPrice * quantity).toFixed(2)} TL)`);
+                productCard.querySelector('.quantity-input').value = 1;
+            }
+        });
+    });
+});
+</script>

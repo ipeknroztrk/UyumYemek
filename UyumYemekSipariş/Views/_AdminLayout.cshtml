@@ -1,0 +1,209 @@
+﻿<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <!-- Gerekli meta taglar -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>@ViewBag.Title - Admin Yönetim Paneli</title>
+    <!-- plugins:css -->
+    <link rel="stylesheet" href="~/wwwroot/Stellar-1.0.0/assets/vendors/simple-line-icons/css/simple-line-icons.css">
+    <link rel="stylesheet" href="~/wwwroot/Stellar-1.0.0/assets/vendors/flag-icon-css/css/flag-icons.min.css">
+    <link rel="stylesheet" href="~/wwwroot/Stellar-1.0.0/assets/vendors/css/vendor.bundle.base.css">
+    <!-- Plugin css for this page -->
+    <link rel="stylesheet" href="~/wwwroot/Stellar-1.0.0/assets/vendors/font-awesome/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="~/wwwroot/Stellar-1.0.0/assets/vendors/bootstrap-datepicker/bootstrap-datepicker.min.css">
+    <link rel="stylesheet" href="~/wwwroot/Stellar-1.0.0/assets/vendors/jvectormap/jquery-jvectormap.css">
+    <link rel="stylesheet" href="~/wwwroot/Stellar-1.0.0/assets/vendors/daterangepicker/daterangepicker.css">
+    <link rel="stylesheet" href="~/wwwroot/Stellar-1.0.0/assets/vendors/chartist/chartist.min.css">
+    <!-- Layout styles -->
+    <link rel="stylesheet" href="~/wwwroot/Stellar-1.0.0/assets/css/vertical-light-layout/style.css">
+    <link rel="shortcut icon" href="~/wwwroot/Stellar-1.0.0/assets/images/favicon.png" />
+</head>
+<body>
+    <div class="container-scroller">
+        <!-- partial:partials/_navbar.html -->
+        <nav class="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
+            <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
+                <a class="navbar-brand brand-logo" href="/Admin/Index">
+                    <img src="~/wwwroot/logo.png" alt="logo" class="logo-dark" />
+                    <img src="~/wwwroot/logo.png" alt="logo-light" class="logo-light">
+                </a>
+                <a class="navbar-brand brand-logo-mini" href="/Admin/Index"><img src="~/wwwroot/logo.png" alt="logo" /></a>
+                <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
+                    <span class="icon-menu"></span>
+                </button>
+            </div>
+
+            <div class="navbar-menu-wrapper d-flex align-items-center">
+                <h5 class="mb-0 font-weight-medium d-none d-lg-flex">Admin Yönetim Paneline Hoşgeldiniz!</h5>
+                <ul class="navbar-nav navbar-nav-right">
+                    <form class="search-form d-none d-md-block" action="#">
+                        <i class="icon-magnifier"></i>
+                        <input type="search" class="form-control" placeholder="Sistem Genelinde Ara" title="Sistem Genelinde Ara">
+                    </form>
+                    <li class="nav-item"><a href="/Admin/Orders" class="nav-link"><i class="icon-basket-loaded"></i></a></li>
+                    <li class="nav-item"><a href="/Admin/Restaurants" class="nav-link"><i class="icon-home"></i></a></li>
+
+                    <li class="nav-item dropdown d-none d-xl-inline-flex user-dropdown">
+                        <a class="nav-link dropdown-toggle" id="UserDropdown" href="#" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img class="img-xs rounded-circle ms-2" src="https://i.hizliresim.com/sk3qhmp.png">
+                            <span class="font-weight-normal">
+                                @if (Session["FirstName"] != null && Session["LastName"] != null)
+                                {
+                                    @Session["FirstName"] @Session["LastName"]
+                                }
+                                else
+                                {
+                                    @(Session["UserName"] ?? "Admin")
+                                }
+                            </span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="UserDropdown">
+                            <div class="dropdown-header text-center">
+                                <img class="img-xs rounded-circle ms-2" src="https://i.hizliresim.com/sk3qhmp.png">
+                                <p class="mb-1 mt-3">
+                                    @if (Session["FirstName"] != null && Session["LastName"] != null)
+                                    {
+                                        @Session["FirstName"] @Session["LastName"]
+                                    }
+                                    else
+                                    {
+                                        @(Session["UserName"] ?? "Admin")
+                                    }
+                                </p>
+                                <p class="mb-1 text-muted">@(Session["Email"] ?? "")</p>
+                            </div>
+                            <a class="dropdown-item" href="/Admin/Users"><i class="dropdown-item-icon icon-people text-primary"></i> Kullanıcı Yönetimi</a>
+                            <a class="dropdown-item" href="/Admin/Restaurants"><i class="dropdown-item-icon icon-home text-primary"></i> Restoran Yönetimi</a>
+                            <a class="dropdown-item" href="/Auth/Logout"><i class="dropdown-item-icon icon-power text-primary"></i> Çıkış Yap</a>
+                        </div>
+                    </li>
+                </ul>
+                <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
+                    <span class="icon-menu"></span>
+                </button>
+            </div>
+        </nav>
+        <!-- partial -->
+        <div class="container-fluid page-body-wrapper">
+            <!-- partial:partials/_sidebar.html -->
+            <nav class="sidebar sidebar-offcanvas" id="sidebar">
+                <ul class="nav">
+                    <li class="nav-item navbar-brand-mini-wrapper">
+                    </li>
+                    <li class="nav-item nav-profile">
+                        <a href="#" class="nav-link">
+                            <div class="profile-image">
+                                <img class="img-xs rounded-circle ms-2" src="https://i.hizliresim.com/sk3qhmp.png">
+                                <div class="dot-indicator bg-danger"></div>
+                            </div>
+                            <div class="text-wrapper">
+                                <p class="profile-name">
+                                    @if (Session["FirstName"] != null && Session["LastName"] != null)
+                                    {
+                                        @Session["FirstName"] @Session["LastName"]
+                                    }
+                                    else
+                                    {
+                                        @(Session["UserName"] ?? "Admin")
+                                    }
+                                </p>
+                                <p class="designation">@(Session["UserType"] ?? "Admin")</p>
+                            </div>
+                            <div class="icon-container">
+                                <div class="dot-indicator bg-danger"></div>
+                            </div>
+                        </a>
+                    </li>
+                    <li class="nav-item nav-category">
+                        <span class="nav-link">Admin Paneli</span>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/Admin/Index">
+                            <span class="menu-title">Dashboard</span>
+                            <i class="icon-screen-desktop menu-icon"></i>
+                        </a>
+                    </li>
+
+                    <li class="nav-item nav-category">
+                        <span class="nav-link">Sistem Yönetimi</span>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="/Admin/Restaurants">
+                            <span class="menu-title">Restoranlar</span>
+                            <i class="icon-home menu-icon"></i>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="/Admin/Users">
+                            <span class="menu-title">Kullanıcılar</span>
+                            <i class="icon-people menu-icon"></i>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="/Admin/Categories">
+                            <span class="menu-title">Kategoriler</span>
+                            <i class="icon-grid menu-icon"></i>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="/Admin/Products">
+                            <span class="menu-title">Tüm Ürünler</span>
+                            <i class="icon-bag menu-icon"></i>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="/Admin/Orders">
+                            <span class="menu-title">Tüm Siparişler</span>
+                            <i class="icon-basket menu-icon"></i>
+                        </a>
+                    </li>
+
+                    <li class="nav-item nav-category">
+                        <span class="nav-link">Sistem</span>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="/Auth/Logout">
+                            <span class="menu-title">Çıkış Yap</span>
+                            <i class="icon-power menu-icon"></i>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            <div class="main-panel">
+                <div class="content-wrapper">
+                    @RenderBody()
+                </div>
+            </div>
+        </div>
+        <!-- page-body-wrapper ends -->
+    </div>
+    <!-- container-scroller -->
+    <!-- plugins:js -->
+    <script src="~/wwwroot/Stellar-1.0.0/assets/vendors/js/vendor.bundle.base.js"></script>
+    <!-- Plugin js for this page -->
+    <script src="~/wwwroot/Stellar-1.0.0/assets/vendors/chart.js/chart.umd.js"></script>
+    <script src="~/wwwroot/Stellar-1.0.0/assets/vendors/jvectormap/jquery-jvectormap.min.js"></script>
+    <script src="~/wwwroot/Stellar-1.0.0/assets/vendors/jvectormap/jquery-jvectormap-world-mill-en.js"></script>
+    <script src="~/wwwroot/Stellar-1.0.0/assets/vendors/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
+    <script src="~/wwwroot/Stellar-1.0.0/assets/vendors/moment/moment.min.js"></script>
+    <script src="~/wwwroot/Stellar-1.0.0/assets/vendors/daterangepicker/daterangepicker.js"></script>
+    <script rel="stylesheet" href="~/wwwroot/Stellar-1.0.0/assets/vendors/chartist/chartist.min.js"></script>
+    <script src="~/wwwroot/Stellar-1.0.0/assets/vendors/progressbar.js/progressbar.min.js"></script>
+    <script src="~/wwwroot/Stellar-1.0.0/assets/js/jquery.cookie.js"></script>
+    <!-- inject:js -->
+    <script src="~/wwwroot/Stellar-1.0.0/assets/js/off-canvas.js"></script>
+    <script src="~/wwwroot/Stellar-1.0.0/assets/js/hoverable-collapse.js"></script>
+    <script src="~/wwwroot/Stellar-1.0.0/assets/js/misc.js"></script>
+    <script src="~/wwwroot/Stellar-1.0.0/assets/js/settings.js"></script>
+    <script src="~/wwwroot/Stellar-1.0.0/assets/js/todolist.js"></script>
+    <!-- Custom js for this page -->
+    <script src="~/wwwroot/Stellar-1.0.0/assets/js/dashboard.js"></script>
+</body>
+</html>
